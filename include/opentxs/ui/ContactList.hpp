@@ -6,8 +6,6 @@
 #ifndef OPENTXS_UI_CONTACTLIST_HPP
 #define OPENTXS_UI_CONTACTLIST_HPP
 
-#ifndef Q_MOC_RUN
-
 #include "opentxs/Forward.hpp"
 
 #include "opentxs/ui/List.hpp"
@@ -50,15 +48,10 @@ private:
     ContactList& operator=(const ContactList&) = delete;
     ContactList& operator=(ContactList&&) = delete;
 };
-}  // namespace ui
-}  // namespace opentxs
-#endif
 
-#if OT_QT || defined(Q_MOC_RUN)
-class opentxs::ui::ContactListQt : public QAbstractItemModel
+#if OT_QT
+class ContactListQt : public QAbstractItemModel
 {
-    Q_OBJECT
-
 public:
     using ConstructorCallback = std::function<
         implementation::ContactList*(RowCallbacks insert, RowCallbacks remove)>;
@@ -95,6 +88,8 @@ signals:
     void updated() const;
 
 private:
+    Q_OBJECT
+
     std::unique_ptr<implementation::ContactList> parent_;
 
     void notify() const;
@@ -110,4 +105,6 @@ private:
     ContactListQt& operator=(ContactListQt&&) = delete;
 };
 #endif
+}  // namespace ui
+}  // namespace opentxs
 #endif

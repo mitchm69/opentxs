@@ -6,8 +6,6 @@
 #ifndef OPENTXS_UI_ACTIVITYTHREAD_HPP
 #define OPENTXS_UI_ACTIVITYTHREAD_HPP
 
-#ifndef Q_MOC_RUN
-
 #include "opentxs/Forward.hpp"
 
 #include "opentxs/ui/List.hpp"
@@ -75,15 +73,10 @@ private:
     ActivityThread& operator=(const ActivityThread&) = delete;
     ActivityThread& operator=(ActivityThread&&) = delete;
 };
-}  // namespace ui
-}  // namespace opentxs
-#endif
 
-#if OT_QT || defined(Q_MOC_RUN)
-class opentxs::ui::ActivityThreadQt : public QAbstractItemModel
+#if OT_QT
+class ActivityThreadQt : public QAbstractItemModel
 {
-    Q_OBJECT
-
 public:
     using ConstructorCallback = std::function<implementation::ActivityThread*(
         RowCallbacks insert,
@@ -132,6 +125,7 @@ signals:
     void updated() const;
 
 private:
+    Q_OBJECT
     Q_PROPERTY(QString displayName READ displayName NOTIFY updated)
     Q_PROPERTY(QString draft READ getDraft NOTIFY updated)
     Q_PROPERTY(QString participants READ participants NOTIFY updated)
@@ -152,4 +146,6 @@ private:
     ActivityThreadQt& operator=(ActivityThreadQt&&) = delete;
 };
 #endif
+}  // namespace ui
+}  // namespace opentxs
 #endif

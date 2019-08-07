@@ -6,8 +6,6 @@
 #ifndef OPENTXS_UI_PROFILE_HPP
 #define OPENTXS_UI_PROFILE_HPP
 
-#ifndef Q_MOC_RUN
-
 #include "opentxs/Forward.hpp"
 
 #include "opentxs/ui/List.hpp"
@@ -145,15 +143,10 @@ private:
     Profile& operator=(const Profile&) = delete;
     Profile& operator=(Profile&&) = delete;
 };
-}  // namespace ui
-}  // namespace opentxs
-#endif
 
-#if OT_QT || defined(Q_MOC_RUN)
-class opentxs::ui::ProfileQt : public QAbstractItemModel
+#if OT_QT
+class ProfileQt : public QAbstractItemModel
 {
-    Q_OBJECT
-
 public:
     using ConstructorCallback = std::function<
         implementation::Profile*(RowCallbacks insert, RowCallbacks remove)>;
@@ -184,6 +177,7 @@ signals:
     void updated() const;
 
 private:
+    Q_OBJECT
     Q_PROPERTY(QString displayName READ displayName NOTIFY updated)
     Q_PROPERTY(QString nymID READ nymID NOTIFY updated)
     Q_PROPERTY(QString paymentCode READ paymentCode NOTIFY updated)
@@ -203,4 +197,6 @@ private:
     ProfileQt& operator=(ProfileQt&&) = delete;
 };
 #endif
+}  // namespace ui
+}  // namespace opentxs
 #endif
